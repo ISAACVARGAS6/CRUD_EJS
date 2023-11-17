@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Tareas</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Lista de Tareas</h1>
+
+        <!-- Formulario para añadir nueva tarea -->
+        <form action="/add" method="POST">
+            <div class="form-group">
+                <input type="text" class="form-control" name="task" placeholder="Nueva Tarea">
+            </div>
+            <button type="submit" class="btn btn-primary">Añadir Tarea</button>
+        </form>
+
+        <!-- Lista de tareas -->
+        <ul class="list-group mt-4">
+            <% tasks.forEach(task => { %>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <%= task.description %>
+                    <div>
+                        <!-- Botón para eliminar tarea -->
+                        <form action="/delete/<%= task.id %>" method="POST" style="display: inline;">
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                        </form>
+                        <!-- Botón para editar tarea -->
+                        <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#editTaskModal-<%= task.id %>">
+                          Editar
+                        </button>
+                    </div>
+                </li>
+                <!-- Modal para editar tarea -->
+                <div class="modal fade" id="editTaskModal-<%= task.id %>" tabindex="-1" role="dialog" aria-labelledby="editTaskModalLabel-<%= task.id %>" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                          <div class="modal-header">
+                              <h5 class="modal-title" id="editTaskModalLabel-<%= task.id %>">Editar Tarea</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                              </button>
+                          </div>
+                          <form action="/update/<%= task.id %>" method="POST">
+                              <div class="modal-body">
+                                  <div class="form-group">
+                                      <label for="taskDescription-<%= task.id %>">Descripción</label>
+                                      <input type="text" class="form-control" id="taskDescription-<%= task.id %>" name="description" value="<%= task.description %>">
+                                  </div>
+                              </div>
+                              <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                  <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                              </div>
+                          </form>
+                      </div>
+                  </div>
+                </div>
+            <% }) %>
+        </ul>
+    </div>
+
+    <!-- Bootstrap JS y dependencias -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.5/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  
+</body>
+</html>
